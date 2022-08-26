@@ -1,0 +1,1133 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Telegrator",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Get User Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID."
+      },
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
+        "responses": {
+          "200": {
+            "description": "User Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Updated User Rebecca Baker": {
+                    "value": {
+                      "id": 13,
+                      "firstName": "Rebecca",
+                      "lastName": "Baker",
+                      "email": "rebecca@gmail.com",
+                      "dateOfBirth": "1985-10-02",
+                      "emailVerified": false,
+                      "createDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "description": "Update the information of an existing user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "If a new email is given, the user's email verified property will be set to false."
+                  },
+                  "dateOfBirth": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name & Date of Birth": {
+                  "value": {
+                    "lastName": "Baker",
+                    "dateOfBirth": "1985-10-02"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch user properties to update."
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "User Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "New User Bob Fellow": {
+                    "value": {
+                      "id": 12,
+                      "firstName": "Bob",
+                      "lastName": "Fellow",
+                      "email": "bob.fellow@gmail.com",
+                      "dateOfBirth": "1996-08-24",
+                      "emailVerified": false,
+                      "createDate": "2020-11-18"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "dateOfBirth"
+                ]
+              },
+              "examples": {
+                "Create User Bob Fellow": {
+                  "value": {
+                    "firstName": "Bob",
+                    "lastName": "Fellow",
+                    "email": "bob.fellow@gmail.com",
+                    "dateOfBirth": "1996-08-24"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new user."
+        },
+        "description": "Create a new user."
+      }
+    },
+    "/channels": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "required": [
+                              "id",
+                              "price",
+                              "er",
+                              "subcribers_count",
+                              "avg_coverage_price",
+                              "avg_coverage"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "title": {},
+                              "avatar": {},
+                              "price": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "er": {
+                                "type": "number"
+                              },
+                              "subcribers_count": {
+                                "type": "number"
+                              },
+                              "avg_coverage_price": {
+                                "type": "number"
+                              },
+                              "avg_coverage": {
+                                "type": "number"
+                              },
+                              "categories": {
+                                "type": "array",
+                                "uniqueItems": true,
+                                "minItems": 1,
+                                "items": {
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "label",
+                                    "created_at",
+                                    "updated_at"
+                                  ],
+                                  "properties": {
+                                    "id": {
+                                      "type": "number"
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "label": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "created_at": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "updated_at": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "pivot": {
+                                      "type": "object",
+                                      "properties": {
+                                        "channel_id": {
+                                          "type": "number"
+                                        },
+                                        "category_id": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      "required": [
+                                        "channel_id",
+                                        "category_id"
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "first_page_url": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "from": {
+                          "type": "number"
+                        },
+                        "last_page": {
+                          "type": "number"
+                        },
+                        "last_page_url": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "links": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "minItems": 1,
+                          "items": {
+                            "required": [
+                              "label",
+                              "active"
+                            ],
+                            "properties": {
+                              "url": {},
+                              "label": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "active": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        },
+                        "next_page_url": {},
+                        "path": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "per_page": {
+                          "type": "number"
+                        },
+                        "prev_page_url": {},
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "current_page",
+                        "data",
+                        "first_page_url",
+                        "from",
+                        "last_page",
+                        "last_page_url",
+                        "links",
+                        "path",
+                        "per_page",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "data"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "status": "success",
+                      "data": {
+                        "current_page": 1,
+                        "data": [
+                          {
+                            "id": 1,
+                            "title": null,
+                            "avatar": null,
+                            "price": "1.00",
+                            "er": 0,
+                            "subcribers_count": 0,
+                            "avg_coverage_price": 45,
+                            "avg_coverage": 45,
+                            "categories": [
+                              {
+                                "id": 1,
+                                "name": "Финансы",
+                                "label": "finance",
+                                "created_at": "2021-12-23T16:20:14.000+00:00",
+                                "updated_at": "2021-12-23T16:20:14.000+00:00",
+                                "pivot": {
+                                  "channel_id": 1,
+                                  "category_id": 1
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "first_page_url": "http://localhost:8000/api/channels?page=1",
+                        "from": 1,
+                        "last_page": 1,
+                        "last_page_url": "http://localhost:8000/api/channels?page=1",
+                        "links": [
+                          {
+                            "url": null,
+                            "label": "&laquo; Previous",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/channels?page=1",
+                            "label": 1,
+                            "active": true
+                          },
+                          {
+                            "url": null,
+                            "label": "Next &raquo;",
+                            "active": false
+                          }
+                        ],
+                        "next_page_url": null,
+                        "path": "http://localhost:8000/api/channels",
+                        "per_page": 10,
+                        "prev_page_url": null,
+                        "to": 1,
+                        "total": 1
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "current_page": 1,
+                        "data": [
+                          {
+                            "id": 1,
+                            "title": null,
+                            "avatar": null,
+                            "price": "1.00",
+                            "er": 0,
+                            "subcribers_count": 0,
+                            "avg_coverage_price": 45,
+                            "avg_coverage": 45,
+                            "categories": [
+                              {
+                                "id": 1,
+                                "name": "Финансы",
+                                "label": "finance",
+                                "created_at": "2021-12-23T16:20:14.000+00:00",
+                                "updated_at": "2021-12-23T16:20:14.000+00:00",
+                                "pivot": {
+                                  "channel_id": 1,
+                                  "category_id": 1
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "first_page_url": "http://localhost:8000/api/channels?page=1",
+                        "from": 1,
+                        "last_page": 1,
+                        "last_page_url": "http://localhost:8000/api/channels?page=1",
+                        "links": [
+                          {
+                            "url": null,
+                            "label": "&laquo; Previous",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/channels?page=1",
+                            "label": 1,
+                            "active": true
+                          },
+                          {
+                            "url": null,
+                            "label": "Next &raquo;",
+                            "active": false
+                          }
+                        ],
+                        "next_page_url": null,
+                        "path": "http://localhost:8000/api/channels",
+                        "per_page": 10,
+                        "prev_page_url": null,
+                        "to": 1,
+                        "total": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "message": "Unauthenticated."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-channels"
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-channels",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "status": "success"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "message": "Unauthenticated."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "price": {
+                          "type": "array",
+                          "items": {
+                            "required": [],
+                            "properties": {}
+                          }
+                        }
+                      },
+                      "required": [
+                        "price"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "price": [
+                          "The price field is required."
+                        ]
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "price": [
+                          "The price field is required."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "tg_link": "https://t.me/papaga",
+                    "price": 1,
+                    "contact_tg": "https://t.me/papagas",
+                    "contact": "me me me",
+                    "categories": [
+                      1
+                    ]
+                  }
+                },
+                "properties": {
+                  "tg_link": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "contact_tg": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "contact": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "categories": {
+                    "type": "array",
+                    "description": "Array of categories id ",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "required": [
+                  "tg_link",
+                  "price",
+                  "contact_tg",
+                  "contact",
+                  "categories"
+                ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "tg_link": "https://t.me/papagas",
+                    "price": 1,
+                    "contact_tg": "https://t.me/papagas",
+                    "contact": "Иванов Иван Иванович"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/auth/signup": {
+      "parameters": [],
+      "post": {
+        "summary": "",
+        "operationId": "post-auth-signup",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "email": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "id": {
+                          "type": "number"
+                        },
+                        "real_email": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "is_telegram_connected": {
+                          "type": "boolean"
+                        },
+                        "telegram": {}
+                      },
+                      "required": [
+                        "name",
+                        "email",
+                        "updated_at",
+                        "created_at",
+                        "id",
+                        "real_email",
+                        "is_telegram_connected"
+                      ]
+                    },
+                    "token": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "user",
+                    "token"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "user": {
+                        "name": "anton3@gmail.com",
+                        "email": "anton3@gmail.com",
+                        "updated_at": "2022-01-20T09:39:43.000000Z",
+                        "created_at": "2022-01-20T09:39:43.000000Z",
+                        "id": 1,
+                        "real_email": "anton3@gmail.com",
+                        "is_telegram_connected": false,
+                        "telegram": null
+                      },
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZGI3OThhMTgxYTAyMGZkZGEwYzEwOTFlN2M0OGUzNThjZmQzMDlmMThlZWJkNDhmODdhY2ZlMzQxNDZmZWE2ODI0MDI0MWZmYmE4ZGU2ZGYiLCJpYXQiOjE2NDI2NzE1ODMuNjI5OTg1LCJuYmYiOjE2NDI2NzE1ODMuNjMwMDI4LCJleHAiOjE2NzQyMDc1ODMuNTk1NjUzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EsMAW31mstZqG1Tqa6wzMG3Uebz_i_P-qboOHNMq5Q6xStS1BHmiSYJhsa4lbvammvKqlKMarLT_n10laqtKr8spgKnSbNRquJjw9nJIhwKvfS8Fsc3BgYbZwW4nAkggGcx4VOzu4TGgQboXkgNoiv8bqDLJnc8mmbzWj5zeH3gCIGYeDNwK3S2k53lUHTsuWKcqCZGfeXU_j3cV5_WaO2Nf3k-NtCyM3OF7-4DEWzwsyfjWyem9Q_5_47-IzZkfkv_DTtDgGNRJX4XTyNBy1PptKh57p1sNyTcq17SrLzki2YvM02OYjsN47OvR1TPwrcUiiQVY5eKaMjHfqPknMEI7SZdj2yMzJ_ecrgq6wN2bGulyZfWHqojQB0OkKLLEc2953vL4iJsiaRcIlIPA3COg8LSpT7Wc-k-UYGLtrVFX98iloNdCvsNLCemI63v6c31P2hbuF4i81zJy5tzN72DevpzrvcKAdHfJVivWG0DqrIfVKhtvJ-iyG2bC2msgtrSSFHJYOGkd0oy5z6KJnpnf1T-lkA0xBA0iBhQaNo2P3G5wIWspbMYD_lFZ00WUD7VXkiqn8fL0dIy-Nv-i5logEEhvF3BJG0FV0Nt8a1Nm2cQLMt4bLdHHB-jNkjxvVeVBUvEzzqBtz0woYMKCoNuqHBa6mxnlY5H4o518_XI"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "user": {
+                        "name": "anton3@gmail.com",
+                        "email": "anton3@gmail.com",
+                        "updated_at": "2022-01-20T09:39:43.000000Z",
+                        "created_at": "2022-01-20T09:39:43.000000Z",
+                        "id": 1,
+                        "real_email": "anton3@gmail.com",
+                        "is_telegram_connected": false,
+                        "telegram": null
+                      },
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZGI3OThhMTgxYTAyMGZkZGEwYzEwOTFlN2M0OGUzNThjZmQzMDlmMThlZWJkNDhmODdhY2ZlMzQxNDZmZWE2ODI0MDI0MWZmYmE4ZGU2ZGYiLCJpYXQiOjE2NDI2NzE1ODMuNjI5OTg1LCJuYmYiOjE2NDI2NzE1ODMuNjMwMDI4LCJleHAiOjE2NzQyMDc1ODMuNTk1NjUzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EsMAW31mstZqG1Tqa6wzMG3Uebz_i_P-qboOHNMq5Q6xStS1BHmiSYJhsa4lbvammvKqlKMarLT_n10laqtKr8spgKnSbNRquJjw9nJIhwKvfS8Fsc3BgYbZwW4nAkggGcx4VOzu4TGgQboXkgNoiv8bqDLJnc8mmbzWj5zeH3gCIGYeDNwK3S2k53lUHTsuWKcqCZGfeXU_j3cV5_WaO2Nf3k-NtCyM3OF7-4DEWzwsyfjWyem9Q_5_47-IzZkfkv_DTtDgGNRJX4XTyNBy1PptKh57p1sNyTcq17SrLzki2YvM02OYjsN47OvR1TPwrcUiiQVY5eKaMjHfqPknMEI7SZdj2yMzJ_ecrgq6wN2bGulyZfWHqojQB0OkKLLEc2953vL4iJsiaRcIlIPA3COg8LSpT7Wc-k-UYGLtrVFX98iloNdCvsNLCemI63v6c31P2hbuF4i81zJy5tzN72DevpzrvcKAdHfJVivWG0DqrIfVKhtvJ-iyG2bC2msgtrSSFHJYOGkd0oy5z6KJnpnf1T-lkA0xBA0iBhQaNo2P3G5wIWspbMYD_lFZ00WUD7VXkiqn8fL0dIy-Nv-i5logEEhvF3BJG0FV0Nt8a1Nm2cQLMt4bLdHHB-jNkjxvVeVBUvEzzqBtz0woYMKCoNuqHBa6mxnlY5H4o518_XI"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "array",
+                          "items": {
+                            "required": [],
+                            "properties": {}
+                          }
+                        }
+                      },
+                      "required": [
+                        "email"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "email": [
+                          "The email field is required."
+                        ]
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "email": [
+                          "The email field is required."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "password_confirmation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "password_confirmation"
+                ],
+                "x-examples": {
+                  "example-1": {
+                    "email": "anton3@gmail.com",
+                    "password": "123456789",
+                    "password_confirmation": "123456789"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "email": "anton3@gmail.com",
+                    "password": "123456789",
+                    "password_confirmation": "123456789"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "operationId": "post-auth-login",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "token"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMzRkOTRiNjE0MDZhZGU2MjQxNDQ3MGY1OTNkMTI4YjZjYzQ4ZmNkYTJlYjFhMDgyOGQzODg3MjJjZDdkM2M0ZTJjYTBiYzBiYmJjNGViZjciLCJpYXQiOjE2NDI2NzMwNDMuNzA0MzQzLCJuYmYiOjE2NDI2NzMwNDMuNzA0MzU0LCJleHAiOjE2NzQyMDkwNDMuNjgzNzMzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.bq418oqFrzFj7qLX88hFykuYCI_RyDRSz4ckVLGUe81OR1Vh72kz4mneug5Yxhz96Rc_tnC1IuH9RPC3jsBXLacnYHqaqsR4eaEu_d_UH6SYNTIy4RBYXxS4Fj2jStIL8oOVBWyi49o-GBSMpOhJs75YdZbo4J50jHxTBrn92GymRe0hqSqapycQo72aIXHEsDczvVQl2WsFYM_HNzr4jXXrgg17SMptHAIrxerCnOpzVnDwVQQbx1xrWrtgU6MsrnBL1tm0reF3xH7H1i1rpG-YtqFIzKLpBA0IW5O9sQhGtw-US8riQBvMKRfvVOutginatH-kWwazkLsN3jwAkcATqz2wW0tMExsLpwcoIY2_1C-MjJ5J1x29b347z63Q2Ly1OXpgt4KkiEIjtxamo_S-EP5gRM59G0uYrsQkQ-EZ2-s7ZaOOj6oeZdsLXudhn7cLdeWMHl66WPxTEDI_8GLQRs5ngYkZN_Ge9tZQKVKffN5S27IeH1S_G0zFvt7kXardg5DXmgdo53AUtRqOo2zuPPVXHaeGOgW0OUYeMWrdOfQZzyM90Az-ULkdy7h5aTCjrl2aYf7HWcuKSAluP-akt1cyfhp4dy7Obvp9RCfHgWuCgJIk3PDesrYu9nNCZQhST-v1YulqAv43a91JFfV6H78PhQixr7_Uv74eNto"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMzRkOTRiNjE0MDZhZGU2MjQxNDQ3MGY1OTNkMTI4YjZjYzQ4ZmNkYTJlYjFhMDgyOGQzODg3MjJjZDdkM2M0ZTJjYTBiYzBiYmJjNGViZjciLCJpYXQiOjE2NDI2NzMwNDMuNzA0MzQzLCJuYmYiOjE2NDI2NzMwNDMuNzA0MzU0LCJleHAiOjE2NzQyMDkwNDMuNjgzNzMzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.bq418oqFrzFj7qLX88hFykuYCI_RyDRSz4ckVLGUe81OR1Vh72kz4mneug5Yxhz96Rc_tnC1IuH9RPC3jsBXLacnYHqaqsR4eaEu_d_UH6SYNTIy4RBYXxS4Fj2jStIL8oOVBWyi49o-GBSMpOhJs75YdZbo4J50jHxTBrn92GymRe0hqSqapycQo72aIXHEsDczvVQl2WsFYM_HNzr4jXXrgg17SMptHAIrxerCnOpzVnDwVQQbx1xrWrtgU6MsrnBL1tm0reF3xH7H1i1rpG-YtqFIzKLpBA0IW5O9sQhGtw-US8riQBvMKRfvVOutginatH-kWwazkLsN3jwAkcATqz2wW0tMExsLpwcoIY2_1C-MjJ5J1x29b347z63Q2Ly1OXpgt4KkiEIjtxamo_S-EP5gRM59G0uYrsQkQ-EZ2-s7ZaOOj6oeZdsLXudhn7cLdeWMHl66WPxTEDI_8GLQRs5ngYkZN_Ge9tZQKVKffN5S27IeH1S_G0zFvt7kXardg5DXmgdo53AUtRqOo2zuPPVXHaeGOgW0OUYeMWrdOfQZzyM90Az-ULkdy7h5aTCjrl2aYf7HWcuKSAluP-akt1cyfhp4dy7Obvp9RCfHgWuCgJIk3PDesrYu9nNCZQhST-v1YulqAv43a91JFfV6H78PhQixr7_Uv74eNto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "array",
+                          "items": {
+                            "required": [],
+                            "properties": {}
+                          }
+                        }
+                      },
+                      "required": [
+                        "email"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "errors"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "email": [
+                          "The email field is required."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "x-examples": {
+                  "example-1": {
+                    "email": "anton3@gmail.com",
+                    "password": "12345678"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "email": "anton3@gmail.com",
+                    "password": "12345678"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "",
+        "x-examples": {
+          "Alice Smith": {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the given user."
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1997-10-31"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Set to true if the user's email has been verified."
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the user was created."
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "emailVerified"
+        ]
+      }
+    }
+  }
+}
