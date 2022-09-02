@@ -66,6 +66,10 @@ class TgstatPost extends Model
         return $this->hasMany(TgstatPostsToViewsByHour::class, 'post_id', 'post_id');
     }
 
+    public function  tgstat_post_stat(): HasOne
+    {
+        return $this->hasOne(TgstatPostsStat::class,'post_id','post_id');
+    }
 
 
     // requests

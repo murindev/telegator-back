@@ -42,11 +42,25 @@ Route::group(['namespace'=>'Api', 'prefix' => 'api/auth', 'middleware' => [Force
 
     Route::get('/tt', function (\App\Models\Channel $channel){
 
+/*        $channel_name = 'utests';
+        $rr = shell_exec("bash -c 'python3 ".config('app.parser_path')."batch_channel.py ".$channel_name." batch_channel'");
+        dump($rr);*/
 
-       $uu = TGBot::sendMessageByChannelId(282,'Вашему каналу предложили выполнить задачу в сервисе Telegator');
-       dump($uu);
 
 
+//        $tCh = new \App\Services\Engine\TaskEngine;
+
+//        dump($tCh);
+//dump((100 - config('app.fee_percent'))/100);
+
+//        \App\Services\TelegramBot\TGBot::sendMessageByUserId(38,'M');
+
+
+//        dump(\App\Services\ShellCommand::batchChannel('moscowcentral'));
+
+/*        $rr = shell_exec("bash -c 'python3 /var/www/ParsingForTelegator_2/batch_channel.py ".$channel." batch_channel'");
+
+        dump($rr);*/
 
     });
 

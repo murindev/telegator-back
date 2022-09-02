@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ChannelCron;
+use App\Console\Commands\ChannelsCron;
+use App\Console\Commands\DemoCron;
 use App\Services\TgStat\Commands\CacheChannelHtml;
 use App\Services\TgStat\Commands\FetchUrl;
 use Illuminate\Console\Scheduling\Schedule;
@@ -17,6 +20,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         FetchUrl::class,
         CacheChannelHtml::class,
+        DemoCron::class,
+        ChannelCron::class,
+        ChannelsCron::class
     ];
 
     /**
@@ -30,6 +36,9 @@ class Kernel extends ConsoleKernel
         if ($this->app->environment('local')) {
             $schedule->command('telescope:prune')->daily();
         }
+
+        $schedule->command('channel:cron')->hourly();
+        $schedule->command('channels:cron')->daily();
     }
 
     /**

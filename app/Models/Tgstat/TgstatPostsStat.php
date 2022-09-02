@@ -20,6 +20,7 @@ class TgstatPostsStat extends Model
 
     protected $casts = [
         'forward_json' => 'object',
-        'mentions_json' => 'object'
+        'mentions_json' => 'object',
+        'views_json' => 'object'
     ];
 }

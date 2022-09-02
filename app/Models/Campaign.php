@@ -134,7 +134,6 @@ class Campaign extends Model
         return $this->filter()->with($this->relations)->paginate(request('rows'));
     }
 
-
     public function updateOrCreateCampaign(StoreCampaignChannelRequest $request){
 
         $validated = $request->validated();

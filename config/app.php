@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -126,6 +126,9 @@ return [
 
     'tg_token' => env('TG_BOT_TOKEN'),
     'fee_percent' => env('FEE_PERCENT',15),
+    'penalty_silence' => env('POST_SILENCE_BROKEN_PENALTY',10),
+    'penalty_schedule' => env('POST_SCHEDULE_BROKEN_PENALTY',100),
+    'parser_path' => env('PARSER_PATH','/var/www/ParsingForTelegator_2/'),
 
     /*
     |--------------------------------------------------------------------------

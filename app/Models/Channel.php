@@ -23,6 +23,7 @@ use App\Models\Tgstat\TgstatPostsToViewsByHour;
 use App\Models\Tgstat\TgstatStat;
 use App\Models\Tgstat\TgstatSubscriber;
 use App\Models\Tgstat\TgstatView;
+use App\Services\ShellCommand;
 use App\Services\TgStat\Models\TgStatChannel;
 use App\Services\Tme\TmeParser;
 use App\Utils\Helper;
@@ -549,6 +550,12 @@ tgstat_views*/
 
     public function channel($id)
     {
+        $channelData = $this->whereId($id)->first();
+        if(!$channelData->parsed_at) {
+            $channelNic = explode('/', $channelData->tg_link);
+            $channelNic = array_pop($channelNic);
+            ShellCommand::batchChannel($channelNic);
+        }
         return $this->with(array_merge($this->relations,$this->relations_channel))->whereId($id)->first();
     }
 

@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateTaskChannelRequest;
 use App\Models\Campaign;
 use App\Models\Channel;
 use App\Models\Task;
+use App\Models\Tgstat\TgstatPost;
+use App\Models\User;
 use App\Services\TelegramBot\TGBot;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $campaign_id
  * @property int $task_id
  * @property int $channel_id
+ * @property int $price
+ * @property int $state
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\Task\TaskChannelFactory factory(...$parameters)
@@ -40,7 +44,7 @@ class TaskChannel extends Model
 
     protected $guarded = [];
 
-    protected $relations = ['channel.tgstat_stat', 'campaign', 'task.media', 'status'];
+    protected $relations = ['channel.tgstat_stat', 'campaign', 'task.media', 'status', 'tgstat_post.tgstat_post_stat'];
 
     // relations
 
@@ -62,6 +66,11 @@ class TaskChannel extends Model
     public function status() : HasOne
     {
         return $this->hasOne(TaskStatus::class,'id','state');
+    }
+
+    public function tgstat_post(): HasOne
+    {
+        return $this->hasOne(TgstatPost::class,'link','post_link');
     }
 
 

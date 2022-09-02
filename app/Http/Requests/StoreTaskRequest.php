@@ -23,7 +23,6 @@ class StoreTaskRequest extends FormRequest
     {
         $this->merge([
             'id' => request('id') ?? null,
-//            'prices' => array_merge((array)request('prices'), ['creatingAuthorsPost' => $this->creatingAuthorsPost]),
             'user_id' => auth()->id(),
             'range_start_at' => $this->date_start.' '.$this->time_start.':00',
             'range_end_at' => $this->date_end.' '.$this->time_end.':00',
